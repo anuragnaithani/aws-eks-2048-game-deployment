@@ -95,7 +95,7 @@ Recommended screenshots:
 | `pods.png` | Kubernetes pods running |
 | `alb.png` | AWS Application Load Balancer |
 | `ingress.png` | Kubernetes Ingress output |
-| `application-running.png` | 2048 game running in browser |
+| `game-running.png` | 2048 game running in browser |
 
 ---
 
