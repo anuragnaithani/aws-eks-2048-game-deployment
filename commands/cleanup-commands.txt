@@ -1,0 +1,18 @@
+# Cleanup Commands
+
+# Delete EKS cluster and related resources
+eksctl delete cluster --name demo-cluster --region us-east-1
+
+# Verify EKS cluster deletion
+aws eks list-clusters --region us-east-1
+
+# Verify Load Balancer deletion
+aws elbv2 describe-load-balancers --region us-east-1
+
+# Optional: Check CloudFormation stacks
+aws cloudformation list-stacks \
+  --region us-east-1 \
+  --stack-status-filter CREATE_COMPLETE UPDATE_COMPLETE DELETE_FAILED
+
+# Optional: Check target groups
+aws elbv2 describe-target-groups --region us-east-1

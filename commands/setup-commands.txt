@@ -1,0 +1,103 @@
+# AWS EKS End-to-End Project Setup Commands
+
+# 1. Configure AWS CLI
+aws configure
+
+# 2. Verify AWS identity
+aws sts get-caller-identity
+
+# 3. Create EKS cluster with Fargate
+eksctl create cluster --name demo-cluster --region us-east-1 --fargate
+
+# 4. Update kubeconfig
+aws eks update-kubeconfig --name demo-cluster --region us-east-1
+
+# 5. Verify nodes
+kubectl get nodes
+
+# 6. Create Fargate profile for 2048 app
+eksctl create fargateprofile \
+  --cluster demo-cluster \
+  --region us-east-1 \
+  --name alb-sample-app \
+  --namespace game-2048
+
+# 7. Deploy 2048 app
+kubectl apply -f yaml/2048_full.yaml
+
+# 8. Verify app resources
+kubectl get pods -n game-2048
+kubectl get svc -n game-2048
+kubectl get ingress -n game-2048
+
+# 9. Associate IAM OIDC provider
+export cluster_name=demo-cluster
+
+eksctl utils associate-iam-oidc-provider \
+  --cluster $cluster_name \
+  --approve
+
+# 10. Download AWS Load Balancer Controller IAM policy
+curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/install/iam_policy.json
+
+# 11. Create IAM policy
+aws iam create-policy \
+  --policy-name AWSLoadBalancerControllerIAMPolicy \
+  --policy-document file://iam_policy.json
+
+# 12. Get AWS Account ID
+export ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+echo $ACCOUNT_ID
+
+# 13. Create IAM service account for Load Balancer Controller
+eksctl create iamserviceaccount \
+  --cluster=demo-cluster \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --role-name AmazonEKSLoadBalancerControllerRole \
+  --attach-policy-arn=arn:aws:iam::$ACCOUNT_ID:policy/AWSLoadBalancerControllerIAMPolicy \
+  --approve
+
+# 14. Get VPC ID
+export VPC_ID=$(aws eks describe-cluster \
+  --name demo-cluster \
+  --region us-east-1 \
+  --query "cluster.resourcesVpcConfig.vpcId" \
+  --output text)
+
+echo $VPC_ID
+
+# 15. Add and update Helm repo
+helm repo add eks https://aws.github.io/eks-charts
+helm repo update eks
+
+# 16. Install AWS Load Balancer Controller
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=demo-cluster \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller \
+  --set region=us-east-1 \
+  --set vpcId=$VPC_ID
+
+# 17. Verify controller
+kubectl get deployment -n kube-system aws-load-balancer-controller
+kubectl get pods -n kube-system | grep load-balancer
+
+# 18. If controller crashes on Fargate due to missing VPC ID, patch it
+kubectl patch deployment aws-load-balancer-controller \
+  -n kube-system \
+  --type='json' \
+  -p='[
+    {
+      "op":"add",
+      "path":"/spec/template/spec/containers/0/args/-",
+      "value":"--aws-vpc-id='$VPC_ID'"
+    }
+  ]'
+
+# 19. Get public ALB address
+kubectl get ingress -n game-2048
+
+# 20. Open application in browser
+# http://<ALB-DNS-ADDRESS>
