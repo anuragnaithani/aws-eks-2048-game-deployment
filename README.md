@@ -90,13 +90,12 @@ Recommended screenshots:
 
 | Screenshot | Description |
 |---|---|
-| `01-eks-cluster.png` | EKS cluster overview |
-| `02-fargate-profiles.png` | Fargate profiles |
-| `03-pods-running.png` | Kubernetes pods running |
-| `04-alb.png` | AWS Application Load Balancer |
-| `05-target-group.png` | Healthy target group |
-| `06-ingress.png` | Kubernetes Ingress output |
-| `07-application-running.png` | 2048 game running in browser |
+| `eks-cluster.png` | EKS cluster overview |
+| `fargate-profile.png` | Fargate profiles |
+| `pods.png` | Kubernetes pods running |
+| `alb.png` | AWS Application Load Balancer |
+| `ingress.png` | Kubernetes Ingress output |
+| `application-running.png` | 2048 game running in browser |
 
 ---
 
@@ -149,22 +148,19 @@ kubectl get ingress -n game-2048
 ![EKS Cluster](screenshots/eks-cluster.png)
 
 ### Fargate Profiles
-![Fargate](screenshots/fargate-profiles.png)
+![Fargate](screenshots/fargate-profile.png)
 
 ### Running Pods
-![Pods](screenshots/pods-running.png)
+![Pods](screenshots/pods.png)
 
 ### AWS Load Balancer
 ![ALB](screenshots/alb.png)
-
-### Target Group
-![Target Group](screenshots/target-group.png)
 
 ### Kubernetes Ingress
 ![Ingress](screenshots/ingress.png)
 
 ### Running Application
-![Application](screenshots/application-running.png)
+![Application](screenshots/game-running.png)
 
 ---
 
