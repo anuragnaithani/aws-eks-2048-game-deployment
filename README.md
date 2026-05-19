@@ -143,6 +143,30 @@ kubectl get ingress -n game-2048
 ```
 
 ---
+## Project Screenshots
+
+### EKS Cluster
+![EKS Cluster](screenshots/01-eks-cluster.png)
+
+### Fargate Profiles
+![Fargate](screenshots/02-fargate-profiles.png)
+
+### Running Pods
+![Pods](screenshots/03-pods-running.png)
+
+### AWS Load Balancer
+![ALB](screenshots/04-alb.png)
+
+### Target Group
+![Target Group](screenshots/05-target-group.png)
+
+### Kubernetes Ingress
+![Ingress](screenshots/06-ingress.png)
+
+### Running Application
+![Application](screenshots/07-application-running.png)
+
+---
 
 ## Troubleshooting Faced
 
