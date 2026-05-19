@@ -1,3 +1,9 @@
+![AWS](https://img.shields.io/badge/AWS-EKS-orange)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-1.34-blue)
+![Helm](https://img.shields.io/badge/Helm-Installed-blueviolet)
+![Status](https://img.shields.io/badge/Project-Completed-brightgreen)
+
+
 # AWS EKS End-to-End Kubernetes Project
 
 This project demonstrates an end-to-end Kubernetes application deployment on **Amazon EKS** using **AWS Fargate**, **Kubernetes Ingress**, **AWS Load Balancer Controller**, and **Application Load Balancer (ALB)**.
