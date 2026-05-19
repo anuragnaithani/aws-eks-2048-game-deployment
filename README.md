@@ -21,7 +21,21 @@ Pods running 2048 Game Application
       ↓
 Amazon EKS Cluster on AWS Fargate
 ```
+## Architecture Diagram
 
+```text
+User
+ ↓
+AWS Application Load Balancer
+ ↓
+Ingress
+ ↓
+Kubernetes Service
+ ↓
+2048 Pods
+ ↓
+Amazon EKS on Fargate
+```
 ---
 
 ## Technologies Used
